@@ -21,11 +21,6 @@ class UI {
                 isbn: '123456'
             },
             {
-                title: 'Book Three',
-                author: 'Mbeza Zulu',
-                isbn: '112233'
-            },
-            {
                 title: 'Book Four',
                 author: 'Chi Babe',
                 isbn: '654321'
@@ -48,6 +43,18 @@ class UI {
     `;
         list.appendChild(row)
     }
+
+    static deleteBook(el) {
+        if (el.classList.contains('delete')) {
+            el.parentElement.parentElement.remove();
+        }
+    }
+
+    static clearFields() {
+        document.getElementById('title').value = '';
+        document.getElementById('author').value = '';
+        document.getElementById('isbn').value = '';
+    }
 }
 
 //Store Class: Handles Storage
@@ -65,14 +72,23 @@ document.getElementById('book-form').addEventListener('submit', (e) => {
     const author = document.getElementById('author').value;
     const isbn = document.getElementById('isbn').value;
 
-    // Instatiate book
-    const book = new Book(title, author, isbn);
+    // Validate fields
+    if (title === '' || author === '' || isbn === '') {
+        alert('Please fill in all fields');
+    } else {
+        // Instatiate book
+        const book = new Book(title, author, isbn);
 
-    console.log(book)
+        //Add Book to UI
+        UI.addBookToList(book);
 
+        //Clear field after adding a book
+        UI.clearFields();
 
+    }
 });
 
-
-
 //Remove a Book
+document.getElementById('book-list').addEventListener('click', (e) => {
+    UI.deleteBook(e.target)
+});
